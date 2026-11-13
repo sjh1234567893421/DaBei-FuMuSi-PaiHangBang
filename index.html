@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大北29届10月排行榜</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    min-height: 100vh;
+    overflow: hidden;
+}
+.page { display: none; min-height: 100vh; width: 100%; }
+.page.active { display: flex; }
+#page1 { justify-content: center; align-items: center; flex-direction: column; gap: 32px; }
+.heading { font-size: 19px; text-align: center; padding: 0 20px; letter-spacing: 1px; }
+.check-btn {
+    display: flex; justify-content: center; align-items: center;
+    width: 190px; height: 53px;
+    border: 2px solid #777; border-radius: 50px;
+    background: transparent; color: white; font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.check-btn:hover { transform: scale(1.12); border-color: #ddd; box-shadow: 0 0 15px rgba(255,255,255,0.12); }
+.check-btn:active { transform: scale(0.96); }
+#page2 { justify-content: center; align-items: center; gap: 15px; flex-direction: row; }
+.loading-text { font-size: 16px; color: #fff; }
+.loader {
+    width: 20px; height: 20px;
+    border: 2px solid #eee; border-radius: 50%;
+    position: relative; overflow: hidden; flex-shrink: 0;
+}
+.loader::before {
+    content: ""; position: absolute; inset: 0;
+    background: white; border-radius: 50%;
+    clip-path: circle(0% at 50% 50%);
+    animation: fillCircle 1.3s ease-in-out infinite;
+}
+@keyframes fillCircle {
+    0% { clip-path: circle(0% at 50% 50%); }
+    65% { clip-path: circle(75% at 50% 50%); }
+    100% { clip-path: circle(0% at 50% 50%); }
+}
+#page3 {
+    display: none; padding: 20px;
+    align-items: flex-start; justify-content: center;
+    flex-direction: column; overflow-y: auto;
+}
+#page3.active { display: flex; }
+.content { width: 100%; max-width: 650px; margin: 0 auto; }
+.list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 28px; max-width: 600px; }
+.item { display: flex; align-items: center; gap: 12px; padding: 5px 0; font-size: 17px; }
+.num { color: #888; min-width: 18px; }
+.notice { margin-top: 22px; font-size: 15px; line-height: 1.8; }
+a { color: #aaa; text-decoration: underline; overflow-wrap: anywhere; }
+a:hover { color: white; }
+@media (max-width: 480px) {
+    .heading { font-size: 16px; }
+    .list { gap: 10px 12px; }
+    .item { font-size: 14px; gap: 7px; }
+    .notice { font-size: 14px; }
+    #page3 { padding: 20px 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 界面1：入口 -->
+<div class="page active" id="page1">
+    <div class="heading">点击查看2026年10月份福亩斯排行榜前三</div>
+    <button class="check-btn" onclick="startLoading()">点击查看（check）</button>
+</div>
+
+<!-- 界面2：加载 -->
+<div class="page" id="page2">
+    <div class="loader"></div>
+    <div class="loading-text">正在载入2026年10月份福亩斯排行榜数据</div>
+</div>
+
+<!-- 界面3：排行榜 -->
+<div class="page" id="page3">
+    <div class="content">
+        <div class="list">
+            <div class="item"><span class="num">1.</span>庞思成</div>
+            <div class="item"><span class="num">2.</span>CN司凤社团团长</div>
+            <div class="item"><span class="num">3.</span>孙笑川</div>
+            <div class="item"><span class="num">4.</span>JP日本天皇</div>
+            <div class="item"><span class="num">5.</span>庞建国</div>
+            <div class="item"><span class="num">6.</span>CN司凤社团团员</div>
+        </div>
+        <div class="notice">
+            请以下人员前往蒋介石温泉别墅领奖。
+            <br>
+            地址：
+            <a href="https://maps.apple.com/place?address=%E4%B8%AD%E5%9B%BD%E6%B1%9F%E8%8B%8F%E7%9C%81%E5%8D%97%E4%BA%AC%E5%B8%82%E6%B1%9F%E5%AE%81%E5%8C%BA%E6%B1%A4%E5%B1%B1%E8%A1%97%E9%81%93%E6%B1%A4%E5%B1%B1%E8%A1%97%E9%81%93%E6%B1%A4%E5%B1%B1%E8%A1%97%E9%81%93%E6%B1%A4%E5%B1%B1%E8%A1%97%E9%81%93%E6%B1%A4%E5%B1%B1%E8%A1%97%E9%81%93%E6%B1%A4%E5%B1%B1%E9%95%87%E6%B8%A9%E6%B3%89%E8%B7%AF3%E5%8F%B7&coordinate=32.053161,119.063659&name=%E8%92%8B%E4%BB%8B%E7%9F%B3%E6%B8%A9%E6%B3%89%E5%88%AB%E5%A2%85&place-id=H2710I3F80D9AC3DD1E&map=explore" target="_blank">蒋介石温泉别墅（点击查看地图）</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function showPage(id) {
+    document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+function startLoading() {
+    showPage("page2");
+    setTimeout(() => {
+        showPage("page3");
+        document.body.style.overflow = "auto";
+    }, 6000);
+}
+</script>
+
+</body>
+</html>
